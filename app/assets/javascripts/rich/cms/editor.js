@@ -149,8 +149,7 @@ Rich.Cms.Editor = (function() {
       if ($("#cleditor_input").length) {
         $("#cleditor_input").cleditor({
           width : 500,
-          height: 300,
-          fonts: "Arial,Arial Black,Comic Sans MS,Courier New,Narrow,Garamond,Georgia,Impact,Sans Serif,Serif,Tahoma,Trebuchet MS,Verdana"
+          height: 300
         })[0].focus();
       }
     }, 250);
