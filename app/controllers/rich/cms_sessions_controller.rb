@@ -1,16 +1,14 @@
 module Rich
   class CmsSessionsController < ::ApplicationController
     before_filter :allow_params_authentication!, :only => :login
+    layout false
 
     def login
       @success = Rich::Cms::Auth.login
 
-      if request.xhr?
-        respond_to do |format|
-          format.js
-        end
-      else
-        redirect_to "/"
+      respond_to do |format|
+        format.js
+        format.html { redirect_to "/" }
       end
     end
 

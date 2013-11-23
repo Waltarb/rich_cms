@@ -1,5 +1,5 @@
 <% if @success %>
   window.location.reload();
 <% else %>
-  $("#<%= Rich::Cms::Auth.klass_symbol %>_<%= Rich::Cms::Auth.inputs.first %>").focus
+  $("#<%= Rich::Cms::Auth.klass_symbol %>_<%= Rich::Cms::Auth.inputs.first %>").trigger("focus");
 <% end %>
