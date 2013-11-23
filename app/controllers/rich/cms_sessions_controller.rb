@@ -14,12 +14,9 @@ module Rich
 
     def logout
       Rich::Cms::Auth.logout
-      if request.xhr?
-        respond_to do |format|
-          format.js
-        end
-      else
-        redirect_to "/"
+
+      respond_to do |format|
+        format.html { redirect_to "/" }
       end
     end
 
