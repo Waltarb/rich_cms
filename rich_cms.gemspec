@@ -20,7 +20,7 @@ Gem::Specification.new do |s|
   s.require_paths = ["lib"]
 
   s.add_dependency "rich_support", "~> 0.1.1"
-  s.add_dependency "moneta"      , "~> 0.6.0"
-  s.add_dependency "mustache"    , "~> 0.99.3"
+  s.add_dependency "moneta"
+  s.add_dependency "mustache"
   s.add_dependency "sass"
 end
