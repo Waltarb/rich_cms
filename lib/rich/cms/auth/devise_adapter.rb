@@ -4,16 +4,12 @@ module Rich
 
       class DeviseAdapter < Adapter
         def login
-          if Devise::VERSION.to_f < 1.1
+          begin
+            sessions = Devise.mappings[klass_symbol].controllers[:sessions]
+            Devise.mappings[klass_symbol].controllers[:sessions] = "rich/cms_sessions"
             warden.authenticate(:scope => klass_symbol)
-          else
-            begin
-              sessions = Devise.mappings[klass_symbol].controllers[:sessions]
-              Devise.mappings[klass_symbol].controllers[:sessions] = "rich/cms_sessions"
-              warden.authenticate(:scope => klass_symbol)
-            ensure
-              Devise.mappings[klass_symbol].controllers[:sessions] = sessions
-            end
+          ensure
+            Devise.mappings[klass_symbol].controllers[:sessions] = sessions
           end
         end
 
