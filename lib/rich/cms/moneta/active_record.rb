@@ -60,7 +60,7 @@ module Moneta
           end
 
           def self.find_or_initialize(key)
-            find_or_initialize_by(#{options[:key]}: key)
+            find_or_initialize_by_#{options[:key]}(key)
           end
 
           def value=(val)
