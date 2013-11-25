@@ -50,9 +50,6 @@ module Moneta
 
     def new_store(options)
       Class.new(::ActiveRecord::Base) do
-        establish_connection options[:connection] || raise("You must specify :connection")
-        table_name = options[:table_name] || raise("You must specify :table_name")
-
         class_eval <<-CODE
           def self.name
             "#{options[:table_name]}"
@@ -74,6 +71,9 @@ module Moneta
             read_attribute(:#{options[:value]})
           end
         CODE
+
+        establish_connection options[:connection] || raise("You must specify :connection")
+        table_name = options[:table_name] || raise("You must specify :table_name")
       end
     end
   end
