@@ -52,7 +52,7 @@ module Moneta
       Class.new(::ActiveRecord::Base) do
         class_eval <<-CODE
           def self.name
-            "#{options[:table_name]}"
+            "#{options[:table_name].singularize.camelcase}"
           end
 
           def self.find(key)
