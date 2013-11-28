@@ -1,8 +1,6 @@
 Rich.Cms.Editor = (function() {
   var content_class        = "rich_cms_content", mark_class = "marked", edit_panel = "#rich_cms_panel",
-      editable_content     = {}, content_items = "",
-      cleditor_images_path = "/assets/cleditor"
-      cleditor_css         = '<style>.cleditorMain {border:1px solid #999; padding:0 1px 1px; background-color:white} .cleditorMain iframe {border:none; margin:0; padding:0} .cleditorMain textarea {border:none; margin:0; padding:0; overflow-y:scroll; font:10pt Arial,Verdana; resize:none; outline:none /* webkit grip focus */} .cleditorToolbar {background: url("' + cleditor_images_path + '/toolbar.gif") repeat} .cleditorGroup {float:left; height:26px} .cleditorButton {float:left; width:24px; height:24px; margin:1px 0 1px 0; background: url("' + cleditor_images_path + '/buttons.gif")} .cleditorDisabled {opacity:0.3; filter:alpha(opacity=30)} .cleditorDivider {float:left; width:1px; height:23px; margin:1px 0 1px 0; background:#CCC} .cleditorPopup {border:solid 1px #999; background-color:white; position:absolute; font:10pt Arial,Verdana; cursor:default; z-index:10000} .cleditorList div {padding:2px 4px 2px 4px} .cleditorList p, .cleditorList h1, .cleditorList h2, .cleditorList h3, .cleditorList h4, .cleditorList h5, .cleditorList h6, .cleditorList font {padding:0; margin:0; background-color:Transparent} .cleditorColor {width:150px; padding:1px 0 0 1px} .cleditorColor div {float:left; width:14px; height:14px; margin:0 1px 1px 0} .cleditorPrompt {background-color:#F6F7F9; padding:4px; font-size:8.5pt} .cleditorPrompt input, .cleditorPrompt textarea {font:8.5pt Arial,Verdana;} .cleditorMsg {background-color:#FDFCEE; width:150px; padding:4px; font-size:8.5pt}</style>';
+      editable_content     = {}, content_items = "";
 
   var register = function(hash) {
     $.extend(editable_content, hash);
@@ -28,7 +26,6 @@ Rich.Cms.Editor = (function() {
                         });
 
     bindSeatHolders();
-    injectCleditorCss();
 
     $.registerAjaxFormHandler({
       "rich_cms_content": afterUpdate
@@ -37,13 +34,6 @@ Rich.Cms.Editor = (function() {
 
   var bindSeatHolders = function() {
     RaccoonTip.register("." + content_class + "." + mark_class + ".sh_hint", "#rich_cms_panel", {event: "focus", beforeShow: edit, afterHide : function(content) { content.hide(); }});
-  };
-
-  var injectCleditorCss = function() {
-    if (!$("head").length) {
-      $(document.body).before("<head></head>");
-    }
-    $(cleditor_css).prependTo("head");
   };
 
   var mark = function(event) {
