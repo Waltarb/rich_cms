@@ -19,7 +19,6 @@ Gem::Specification.new do |s|
   s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
   s.require_paths = ["lib"]
 
-  s.add_dependency "rich_support", "~> 0.1.1"
   s.add_dependency "moneta"
   s.add_dependency "mustache"
   s.add_dependency "sass"
