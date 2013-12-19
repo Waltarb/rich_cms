@@ -5,7 +5,6 @@ end
 module Rich
   module Cms
     module Content
-
       class CssClassNotMatchedError < StandardError; end
 
       def self.included(base)
@@ -23,8 +22,9 @@ module Rich
       @@classes = []
 
       def add_class(klass)
-        return if @@classes.include?(klass)
-        (@@classes << klass).sort!{|a, b| a.name <=> b.name}
+        return if @@classes.map(&:to_s).include?(klass.to_s)
+
+        @@classes << klass
       end
 
       def check_in_memory_storage
@@ -43,15 +43,14 @@ module Rich
       end
 
       def javascript_hash
-        pairs = @@classes.sort do |a, b|
-                            a.css_class <=> b.css_class
-                          end.
-                          collect do |klass|
-                           "#{klass.css_class.inspect}: #{klass.to_javascript_hash}"
-                          end
+        pairs = []
+
+        @@classes.each do |klass|
+          pairs << "#{klass.css_class.inspect}: #{klass.to_javascript_hash}"
+        end
+
         "{#{pairs.join ", "}}".html_safe
       end
-
     end
   end
 end
