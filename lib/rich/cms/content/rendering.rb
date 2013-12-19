@@ -81,15 +81,17 @@ module Rich
         module InstanceMethods
 
           def to_tag(options = {})
-            if (tag = derive_tag(options)).nil?
-              value
-            else
-              attrs = ActiveSupport::OrderedHash.new
+            attrs = ActiveSupport::OrderedHash.new
+            attrs[:mustache_locals] = options.delete(:locals)
 
+            tag = derive_tag(options)
+
+            if tag.nil?
+              parse_locals(value, attrs[:mustache_locals])
+            else
               (options[:html] || {}).each do |key, value|
                 attrs[key.to_sym] = value
               end
-              attrs[:mustache_locals] = options.delete(:locals) if options.include? :locals
 
               if editable?
                 attrs[:class]                     = [self.class.css_class, attrs.try(:fetch, :class, nil)].compact.join " "
@@ -107,15 +109,19 @@ module Rich
               else
                 tag_string tag, attrs
               end
-
             end.html_safe
-
           end
 
           def derive_tag(options)
             tag = options[:tag] || configuration[:tag]
+
             return if !editable? && tag == :none
-            (tag unless tag == :none) || (%w(text html).include?(options[:as].to_s.downcase) ? :div : :span)
+
+            if tag != :none
+              tag
+            else
+              [:text, :html].include?(options[:as]) ? :div : :span
+            end
           end
 
           def derive_text
@@ -140,9 +146,11 @@ module Rich
             collection.collect do |entry|
 
               raise ArgumentError, "Expected at least one cmsable attribute for #{entry.class} (use attr_cmsable in class definitino)" if entry.class.attr_cmsables.empty?
+
               attributes = attrs.dup.tap do |hash|
                              hash[:mustache_locals] = (hash[:mustache_locals] || {}).stringify_keys.merge Hash[*entry.class.attr_cmsables.collect{|x| [x.to_s, entry.send(x)]}.flatten]
                            end
+
               tag_string tag, attributes
 
             end.join ""
@@ -150,23 +158,27 @@ module Rich
 
           def tag_string(tag, attrs)
             attributes = attrs.dup
+
             html       = if locals = attributes.delete(:mustache_locals)
                            attributes[:"data-mustache_locals"] = locals.collect{|key, value| "#{key}: \"#{value}\""}.join(", ") if editable?
-                           Mustache.render derive_text, locals
+                           parse_locals(derive_text, locals)
                          else
                            derive_text
                          end
+
             attributes = attributes.collect{|key, value| "#{key}=\"#{::ERB::Util.html_escape value}\""}.join(" ")
 
             "<#{[tag, (attributes unless attributes.empty?)].compact.join(" ")}>#{html}</#{tag}>"
           end
 
+          def parse_locals(text, locals)
+            Mustache.render derive_text, locals
+          end
+
           def configuration
             self.class.send :configuration
           end
-
         end
-
       end
     end
   end
