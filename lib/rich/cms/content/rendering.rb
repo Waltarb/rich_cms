@@ -117,11 +117,7 @@ module Rich
 
             return if !editable? && tag == :none
 
-            if tag != :none
-              tag
-            else
-              [:text, :html].include?(options[:as]) ? :div : :span
-            end
+            (tag unless tag == :none) || ([:text, :html].include?(options[:as]) ? :div : :span)
           end
 
           def derive_text
