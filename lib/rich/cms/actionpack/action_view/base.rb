@@ -2,7 +2,7 @@ module ActionView
   class Base
 
     def rich_cms
-      render :file => File.expand_path("../../../../../../app/views/rich_cms.html.erb", __FILE__) if !!session[:rich_cms].try(:fetch, :display, nil)
+      render :file => File.expand_path("../../../../../../app/views/rich_cms.html.erb", __FILE__) if session[:rich_cms_display]
     end
 
     # //////////////////////////////////

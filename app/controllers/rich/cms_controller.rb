@@ -3,12 +3,12 @@ module Rich
     before_filter :require_login, :except => [:display, :position]
 
     def display
-      (session[:rich_cms] ||= {})[:display] = params[:display]
+      session[:rich_cms_display] = params[:display]
       request.xhr? ? render(:nothing => true) : redirect_to("/")
     end
 
     def position
-      session[:rich_cms][:position] = params[:position]
+      session[:rich_cms_position] = params[:position]
       render :nothing => true
     end
 
