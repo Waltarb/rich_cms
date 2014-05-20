@@ -60,7 +60,11 @@ module Moneta
           end
 
           def self.find_or_initialize(key)
-            find_or_initialize_by(:"#{options[:key]}" => key)
+            if Rails::VERSION::MAJOR >= 4
+              find_or_initialize_by(#{options[:key]}: key)
+            else
+              find_or_initialize_by_#{options[:key]}(key)
+            end
           end
 
           def value=(val)
