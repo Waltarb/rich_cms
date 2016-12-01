@@ -7,7 +7,7 @@ end
 
 module Moneta
   class ActiveRecord
-
+    
     def initialize(options = {})
       @store = new_store({:key => :key, :value => :value}.merge(options))
     end
@@ -17,6 +17,8 @@ module Moneta
     end
 
     def []=(key, value)
+      puts "=====>"
+      puts key
       entry = @store.find_or_initialize(key)
       entry.value = value
       entry.save!
@@ -51,6 +53,7 @@ module Moneta
     def new_store(options)
       Class.new(::ActiveRecord::Base) do
         class_eval <<-CODE
+          attr_accessible :key
           def self.name
             "#{options[:table_name].singularize.camelcase}"
           end

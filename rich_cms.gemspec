@@ -22,4 +22,5 @@ Gem::Specification.new do |s|
   s.add_dependency "moneta"
   s.add_dependency "mustache"
   s.add_dependency "sass"
+  s.add_dependency "protected_attributes"
 end
